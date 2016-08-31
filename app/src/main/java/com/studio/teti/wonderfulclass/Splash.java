@@ -23,8 +23,7 @@ public class Splash extends AppCompatActivity {
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
-                    Intent openMainActivity = new Intent("com.studio.teti.wonderfulclass.MAINACTIVITY");
-                    startActivity(openMainActivity);
+                    startActivity(new Intent(Splash.this, LoginActivity.class));
                 }
             }
         };
