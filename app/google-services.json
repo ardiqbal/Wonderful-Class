@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "83812485059",
+    "firebase_url": "https://wonderful-class-43c06.firebaseio.com",
+    "project_id": "wonderful-class-43c06",
+    "storage_bucket": "wonderful-class-43c06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83812485059:android:38ba4ae8602e753e",
+        "android_client_info": {
+          "package_name": "com.studio.teti.wonderfulclass"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "83812485059-tldenqorlt1tq0ivub5lirbear9lev3o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBp9-_DaCAjP3lAd5kT4XAYCRKjIKAJ9EI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_google_signin_btn_text_dark_default">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_below="@+id/add_peson_cls_btn"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:text="Nama"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:textColorLink="@color/mainColor"
+            android:textColor="@color/mainColor" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Masukkan Nama Panjang"
+            android:ems="10"
+            android:id="@+id/input_nama_lengkap"
+            android:textSize="16sp"
+            android:textColor="@color/inputTextColor"
+            android:textColorLink="@color/mainColor"
+            android:editable="false" />
+
+        <TextView
+            android:text="Nama Panggilan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView4"
+            android:textColor="@color/mainColor"
+            android:textColorLink="@color/mainColor"
+            android:layout_marginTop="30dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Masukkan Nama Panggilan"
+            android:ems="10"
+            android:id="@+id/editText2"
+            android:textColorLink="@color/mainColor"
+            android:textColor="@color/inputTextColor"
+            android:textSize="16sp" />
+
+        <TextView
+            android:text="Pilih Avatar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView5"
+            android:textColor="@color/mainColor"
+            android:layout_marginTop="30dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/anak_laki"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/anak_perempuan"/>
+            </LinearLayout>
+            <RadioGroup
+                android:id="@+id/radioGroup1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+                <RadioButton
+                    android:id="@+id/button_male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"/>
+                <RadioButton
+                    android:id="@+id/button_female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"/>
+            </RadioGroup>
+        </LinearLayout>
+
+
+        <Button
+            android:text="Tambah"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button5"
+            android:background="@color/mainColor"
+            android:textColor="@color/common_google_signin_btn_text_dark_default"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="30dp" />
+    </LinearLayout>
+
+    <TextView
+        android:text="Tambah Murid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:id="@+id/textView2"
+        android:textColor="@color/mainColor"
+        android:textSize="16sp"
+        android:layout_alignBaseline="@+id/add_peson_cls_btn"
+        android:layout_alignBottom="@+id/add_peson_cls_btn"
+        android:layout_toEndOf="@+id/add_peson_cls_btn" />
+
+    <Button
+        android:layout_marginTop="18dp"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_peson_cls_btn"
+        android:layout_marginStart="16dp"
+        android:background="@android:color/transparent"
+        android:text="X"
+        android:textSize="20sp"
+        android:textColor="@color/mainColor"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+
+</RelativeLayout>
