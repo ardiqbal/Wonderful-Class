@@ -1,65 +1,95 @@
 package com.studio.teti.wonderfulclass;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-/**
- * Created by msipc on 30/08/2016.
- */
+import java.util.ArrayList;
 
-public class ImageAdapter extends BaseAdapter {
-    private Context mContext;
+public class PersonDetailsAdapter extends BaseAdapter {
+    private ArrayList<Person> arrayListPerson;
+    private Context context;
+    private LayoutInflater inflater;
 
-    public ImageAdapter(Context c) {
-        mContext = c;
+    public PersonDetailsAdapter(Context context, ArrayList<Person> arrayListPerson) {
+        this.context = context;
+        this.arrayListPerson = arrayListPerson;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    @Override
     public int getCount() {
-        return mThumbIds.length;
+        return arrayListPerson.size();
     }
 
+    @Override
     public Object getItem(int position) {
-        return null;
+        return arrayListPerson.get(position);
     }
 
+    @Override
     public long getItemId(int position) {
         return 0;
     }
 
-    // create a new ImageView for each item referenced by the Adapter
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
-        if (convertView == null) {
-            // if it's not recycled, initialize some attributes
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(150, 150));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(5, 5, 5, 5);
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        View v = convertView;
+        Holder holder;
+        if (v == null) {
+            v = inflater.inflate(R.layout.content_kelas, null);
+            holder = new Holder();
+            holder.PersonName = (TextView) v.findViewById(R.id.PersonName);
+            v.setTag(holder);
         } else {
-            imageView = (ImageView) convertView;
+            holder = (Holder) v.getTag();
         }
 
-        imageView.setImageResource(mThumbIds[position]);
-        return imageView;
+        holder.PersonName.setText(arrayListPerson.get(position).getName());
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,AddOrUpdatePersonActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Position", position);
+                context.getApplicationContext().startActivity(intent);
+            }
+        });
+        holder.DeletePerson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowConfirmDialog(context, position);
+            }
+        });
+        return v;
     }
 
+    class Holder {
+        TextView PersonName;
+    }
 
-    private Integer[] mThumbIds = {
-            R.mipmap.sample_2, R.mipmap.sample_3,
-            R.mipmap.sample_4, R.mipmap.sample_5,
-            R.mipmap.sample_6, R.mipmap.sample_7,
-            R.mipmap.sample_0, R.mipmap.sample_1,
-            R.mipmap.sample_2, R.mipmap.sample_3,
-            R.mipmap.sample_4, R.mipmap.sample_5,
-            R.mipmap.sample_6, R.mipmap.sample_7,
-            R.mipmap.sample_0, R.mipmap.sample_1,
-            R.mipmap.sample_2, R.mipmap.sample_3,
-            R.mipmap.sample_4, R.mipmap.sample_5,
-            R.mipmap.sample_6, R.mipmap.sample_7
-    };
-
+    public static void ShowConfirmDialog(Context context, final int position) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder
+                .setMessage("Are you sure you want to delete this entry?")
+                .setCancelable(true)
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        MainActivity.getInstance().deletePerson(position);
+                    }
+                })
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
 }

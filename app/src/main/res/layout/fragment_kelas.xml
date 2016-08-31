@@ -3,10 +3,12 @@
     android:layout_height="match_parent"
     android:id="@+id/gridview_kelas"
     android:columnWidth="50dp"
-    android:numColumns="auto_fit"
+    android:numColumns="4"
     android:verticalSpacing="15dp"
     android:horizontalSpacing="30dp"
     android:stretchMode="columnWidth"
     android:gravity="center">
+
+
 
 </GridView>
