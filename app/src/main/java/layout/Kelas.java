@@ -11,8 +11,11 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.studio.teti.wonderfulclass.ImageAdapter;
+import com.studio.teti.wonderfulclass.Person;
+import com.studio.teti.wonderfulclass.PersonDetailsAdapter;
 import com.studio.teti.wonderfulclass.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +36,7 @@ public class Kelas extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private static ArrayList<Person> arrayListPerson = new ArrayList<>();
 
     public Kelas() {
         // Required empty public constructor
@@ -71,7 +75,7 @@ public class Kelas extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_kelas, container, false);
         GridView gridview = (GridView)v.findViewById(R.id.gridview_kelas);
-        gridview.setAdapter(new ImageAdapter(v.getContext()));
+        gridview.setAdapter(new PersonDetailsAdapter(v.getContext(), arrayListPerson));
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,

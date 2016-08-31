@@ -1,5 +1,9 @@
 package com.studio.teti.wonderfulclass;
 
+/**
+ * Created by Rifqi Zuliansyah on 31/08/2016.
+ */
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,49 +51,18 @@ public class PersonDetailsAdapter extends BaseAdapter {
             v = inflater.inflate(R.layout.content_kelas, null);
             holder = new Holder();
             holder.PersonName = (TextView) v.findViewById(R.id.PersonName);
+            holder.avatar = (ImageView) v.findViewById(R.id.Avatar);
             v.setTag(holder);
         } else {
             holder = (Holder) v.getTag();
         }
 
         holder.PersonName.setText(arrayListPerson.get(position).getName());
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context,AddOrUpdatePersonActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("Position", position);
-                context.getApplicationContext().startActivity(intent);
-            }
-        });
-        holder.DeletePerson.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShowConfirmDialog(context, position);
-            }
-        });
         return v;
     }
 
     class Holder {
         TextView PersonName;
-    }
-
-    public static void ShowConfirmDialog(Context context, final int position) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder
-                .setMessage("Are you sure you want to delete this entry?")
-                .setCancelable(true)
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        MainActivity.getInstance().deletePerson(position);
-                    }
-                })
-                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        ImageView avatar;
     }
 }
