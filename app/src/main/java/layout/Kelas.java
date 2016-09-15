@@ -9,11 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+import com.studio.teti.wonderfulclass.MainActivity;
 import com.studio.teti.wonderfulclass.Person;
 import com.studio.teti.wonderfulclass.PersonDetailsAdapter;
 import com.studio.teti.wonderfulclass.R;
+import com.studio.teti.wonderfulclass.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -36,7 +43,6 @@ public class Kelas extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private static ArrayList<Person> arrayListPerson = new ArrayList<>();
 
     public Kelas() {
         // Required empty public constructor
@@ -69,22 +75,42 @@ public class Kelas extends Fragment {
         }
     }
 
+    public PersonDetailsAdapter personDetailsAdapter;
+    public GridView gridview;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_kelas, container, false);
-        GridView gridview = (GridView)v.findViewById(R.id.gridview_kelas);
-        gridview.setAdapter(new PersonDetailsAdapter(v.getContext(), arrayListPerson));
+        gridview = (GridView)v.findViewById(R.id.gridview_kelas);
+
+
+        /*Firebase listSiswaRef = new Firebase(Constants.FIREBASE_URL).child("listSiswa");
+        listSiswaRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Person siswa = dataSnapshot.getValue(Person.class);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });*/
+
+        personDetailsAdapter = new PersonDetailsAdapter(v.getContext(), MainActivity.arrayListPerson);
+        gridview.setAdapter(personDetailsAdapter);
+        personDetailsAdapter.notifyDataSetChanged();
+        gridview.invalidate();
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Toast.makeText(v.getContext(), "" + position,
+                Toast.makeText(v.getContext(), "Coming Soon! Saat lolos final Gemastik 9!",
                         Toast.LENGTH_SHORT).show();
             }
         });
-
 
         return v;
     }

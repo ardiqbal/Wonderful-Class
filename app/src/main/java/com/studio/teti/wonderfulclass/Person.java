@@ -10,9 +10,8 @@ import java.util.Map;
 public class Person {
 
     private String name;
-    private String email;
-    private String phone;
-    private int age;
+    private int mark;
+    private int image;
 
     public Person(){
         /*Blank default constructor essential for Firebase*/
@@ -25,33 +24,22 @@ public class Person {
         return name;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setImage(int image) {
+        this.image = image;
     }
-    public String getEmail() {
-        return email;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-    public String getPhone() {
-        return phone;
+    public int getImage() {
+        return image;
     }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
-    public int getAge() {
-        return age;
+    public void setMark(int mark) { this.mark = mark; }
+    public int getMark() {
+        return mark;
     }
 
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("name", name);
-        result.put("email", email);
-        result.put("phone", phone);
-        result.put("age", age);
+        result.put("image", image);
         return result;
     }
 }

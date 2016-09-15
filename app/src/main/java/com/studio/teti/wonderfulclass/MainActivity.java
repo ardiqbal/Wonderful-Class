@@ -1,8 +1,10 @@
 package com.studio.teti.wonderfulclass;
 
+import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,13 +13,32 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.firebase.client.Firebase;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.studio.teti.wonderfulclass.utils.Constants;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import layout.Aktivitas;
 import layout.Kelas;
+import layout.PR;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +56,18 @@ public class MainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    static final String TAG = "Main Activity";
+    private DatabaseReference mDatabase;
+    private FloatingActionButton fab;
+    private ProgressBar progressBar;
+    private GridView gvPerson;
+    private static MainActivity mainActivity;
+    public static ArrayList<Person> arrayListPerson = new ArrayList<>();
+
+    private ArrayList<String> keysArray;
+
+    private Firebase myFirebase;
+    private ValueEventListener myFirebaseListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,30 +80,131 @@ public class MainActivity extends AppCompatActivity {
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
+        myFirebase = new Firebase(Constants.FIREBASE_URL);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.addChildEventListener(childEventListener);
+        mainActivity = this;
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        keysArray = new ArrayList<>();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
                 FragmentManager fm = getSupportFragmentManager();
-
-                AddPerson newFragment = new AddPerson();
-                newFragment.show(fm, "pop up");
-
-
+                AddPersonFragment addPerson = new AddPersonFragment();
+                addPerson.show(fm, "pop up");
             }
         });
 
+        //personDetailsAdapter = new PersonDetailsAdapter(MainActivity.this, arrayListPerson);
+        //gvPerson.setAdapter(personDetailsAdapter);
+
+        new Wait().execute();
     }
 
+    public class Wait extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+//            progressBar.setVisibility(View.VISIBLE);
+ //           gvPerson.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                Thread.sleep(5000);
+            }
+            catch (InterruptedException ie) {
+                Log.d(TAG,ie.toString());
+            }
+            return(arrayListPerson.size()==0);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean bool) {
+
+        //        updateView();
+        }
+    }
+
+    public static MainActivity getInstance() {
+        return mainActivity;
+    }
+
+    public ArrayList<String> getKeysArray() {
+        return keysArray;
+    }
+
+    public DatabaseReference getmDatabase() {
+        return mDatabase;
+    }
+
+    public void addPerson(Person model) {
+        Person person = new Person();
+        person.setName(model.getName());
+        person.setImage(model.getImage());
+
+        String key = mDatabase.child("Persons").push().getKey();
+        Map<String, Object> postValues = person.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(key, postValues);
+        mDatabase.updateChildren(childUpdates);
+    }
+
+    ChildEventListener childEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            //gvPerson.setVisibility(View.GONE);
+            //progressBar.setVisibility(View.VISIBLE);
+            Log.d(TAG, dataSnapshot.getKey() + ":" + dataSnapshot.getValue().toString());
+            Person person = dataSnapshot.getValue (Person.class);
+            arrayListPerson.add(person);
+            keysArray.add(dataSnapshot.getKey());
+//            updateView();
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            String changedKey = dataSnapshot.getKey();
+            int changedIndex = keysArray.indexOf(changedKey);
+            Person person = dataSnapshot.getValue(Person.class);
+            arrayListPerson.set(changedIndex,person);
+//            updateView();
+        }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+            String deletedKey = dataSnapshot.getKey();
+            int removedIndex = keysArray.indexOf(deletedKey);
+            keysArray.remove(removedIndex);
+            arrayListPerson.remove(removedIndex);
+//            updateView();
+        }
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            Toast.makeText(getApplicationContext(),"Could not update.",Toast.LENGTH_SHORT).show();
+//            updateView();
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        arrayListPerson.clear();
+        mDatabase.removeEventListener(childEventListener);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -129,12 +263,14 @@ public class MainActivity extends AppCompatActivity {
                 return v;
             }
             else if(getArguments().getInt(ARG_SECTION_NUMBER) == 2){
-                View rootView = inflater.inflate(R.layout.fragment_aktivitas, container, false);
-                return rootView;
+                Aktivitas fragmentAktivitas = new Aktivitas();
+                View v = fragmentAktivitas.onCreateView(inflater, container, savedInstanceState);
+                return v;
             }
             else{
-                View rootView = inflater.inflate(R.layout.fragment_pr, container, false);
-                return rootView;
+                PR fragmentPR = new PR();
+                View v = fragmentPR.onCreateView(inflater, container, savedInstanceState);
+                return v;
             }
         }
     }

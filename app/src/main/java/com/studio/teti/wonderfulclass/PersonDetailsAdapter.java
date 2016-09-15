@@ -7,6 +7,8 @@ package com.studio.teti.wonderfulclass;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Parcel;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PersonDetailsAdapter extends BaseAdapter {
     private ArrayList<Person> arrayListPerson;
@@ -58,6 +61,7 @@ public class PersonDetailsAdapter extends BaseAdapter {
         }
 
         holder.PersonName.setText(arrayListPerson.get(position).getName());
+        holder.avatar.setImageResource(arrayListPerson.get(position).getImage());
         return v;
     }
 
